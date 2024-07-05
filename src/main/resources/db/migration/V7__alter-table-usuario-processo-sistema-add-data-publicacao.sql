@@ -1,0 +1,2 @@
+alter table usuario_processo_sistema
+add data_publicacao datetime;
