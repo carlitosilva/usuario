@@ -129,9 +129,13 @@ public class UsuarioController {
     }
 
     @GetMapping("/obter-lista-publicacao")
-    public ResponseEntity<List<ProcessoListagemModel>> listarPublicaveis() {
-        var processosList = processoRepository.findAllByDataPublicacaoIsNull().stream().
+    public ResponseEntity<List<ProcessoListagemModel>> listarPublicaveis(@RequestParam("numeroProcesso") String numeroProcesso, @RequestParam("siglaSistema") String siglaSistema, @PageableDefault Pageable paginacao) {
+        var processosList = processoRepository.findAllByNumeroProcessoAndSiglaSistema(numeroProcesso, siglaSistema, paginacao).stream().
                 map(p -> new ProcessoListagemModel(p)).collect(Collectors.toList());
         return ResponseEntity.ok(processosList);
+
+/*        var page = processoRepository.findAllByNumeroProcessoAndSiglaSistema(numeroProcesso, siglaSistema, paginacao).
+                map(p -> new ProcessoListagemModel(p.getId(), p.getNumeroProcesso(), new UsuarioListagemModel(p.getUsuario()), new SistemaListagemModel(p.getSistema().getSigla())));
+        return ResponseEntity.ok(page.stream().toList());*/
     }
 }
